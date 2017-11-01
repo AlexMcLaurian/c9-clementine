@@ -1,0 +1,17 @@
+html
+    head 
+        title head
+        script(src="controllers/clientClicks.js")
+    header  header
+    body    
+        p(class='main') Hi. What is your name? 
+        form(action='/post-name', method="POST")
+            label
+                | Your name:
+                input(type='text', name='user', value='')
+            input(type='submit', value='Submit')
+        br
+        p Hi #{name}.
+        br
+        a(onclick='twitterLogin()' class='user') #[button Sign in with twitter] 
+        p #{name}

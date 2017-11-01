@@ -1,17 +1,28 @@
 'use strict';
 
 var express = require('express');
-var routes = require('./app/routes/index.js');
+//var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
+var router = require('./app/routes/index.js');
+var bodyParser = require('body-parser');
 
 var app = express();
+
+app.set('view engine', 'pug');
 require('dotenv').load();
 require('./app/config/passport')(passport);
 
 mongoose.connect(process.env.MONGO_URI);
 mongoose.Promise = global.Promise;
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 
 app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
 app.use('/public', express.static(process.cwd() + '/public'));
@@ -26,7 +37,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-routes(app, passport);
+//routes(app, passport);
+app.use('/', router)
 
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {
